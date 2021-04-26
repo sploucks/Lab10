@@ -1,0 +1,242 @@
+/*****************************************************************************
+ * 
+ *  Programmers and Purdue Email Addresses:
+ *  1. jone1890@purdue.edu
+ *  2. louckss@purdue.edu
+ *  3. jense105@purdue.edu
+ *  
+ *  Lab #: 10
+ *  
+ *  Academic Integrity Statement:
+ *  
+ *  We have not used source code obtained from any other unauthorized source,
+ *  either modified or unmodified.  Neither have we provided access to our code
+ *  to another. The effort we are submitting is our own original work.
+ *  
+ *  Day, Time, Location of Lab: Thursday, 3:30-4:20, Hampton 3314
+ *  
+ *  Program Description:
+ *  program sorts an array into ascending values of odds and evens, then finds
+ *  the sums of the data found at the sorted data modulus-ed by the length of
+ *  the array. 
+ *  
+ * ***************************************************************************/
+
+#include<stdio.h>
+#include<math.h>
+
+#define NUMELEM 20
+
+//GLOBAL DECLARATIONS
+int inputOne(int[]);
+void sortingValues(int[], int);
+int sumThing(int[], int);
+void printVal(int);
+void printArray(int[]);
+
+int main()
+{ 
+  //LOCAL DECLARATIONS
+  int values[NUMELEM]; //INITIALIZES THE THE ARRRAY THE INPUTTED VALUES GO INTO AS AN INT
+  int count; //INIIALIZES THE COUNT FOR THE INPUT LOOP AS AN INT
+  int sum; //INITIALIZES THE SUM OF THE NUMBERS AS AN INT
+  
+  //EXECUTABLE STATEMENTS
+  //FUNCTION CALLS
+  count = inputOne(values);
+  sortingValues(values, count);
+  parityCalc(values, count);
+  sum = sumThing(values, count);
+  
+  //prints
+  printArray(values);
+  printVal(sum);
+  
+  //return
+  return(0);
+}
+
+/***************************************************************************
+ * *
+ * *  Function Information
+ * *
+ * *  Name of Function: inputOne
+ * *
+ * *  Function Return Type: int
+ * *
+ * *  Parameters (list data type, name, and comment one per line): 
+ * *  1) int values[] // the input for the array of data
+ * *
+ * *  Function Description:
+ * *  Function takes user input for the each array element.
+ * *
+ * ***************************************************************************/
+
+int inputOne (int values[])
+{ 
+  //LOCAL DECLARATIONS
+  int i; //LOOP VARIABLE THAT IS UPDATED AS AN INT
+  int count = 0;  //INITIALIZES THE COUNT VARIABLE AS AN INT
+  
+  //EXECUTABLE STATEMENTS
+  printf("Enter up to 20 integer values -> ");
+  for (i = 0; i < NUMELEM; i++)
+  { 
+    count++;
+    scanf("%d", &values[i]);
+    
+    if (values[i] == -1)
+    {
+      while (i < NUMELEM)
+      {
+        i++;
+        values[i] = -1;
+      }
+      count--;
+    }
+  }
+  return(count); //returns the length of the usable elements in the array
+}
+
+/***************************************************************************
+ * *
+ * *  Function Information
+ * *
+ * *  Name of Function: sortingValues
+ * *
+ * *  Function Return Type: void
+ * *
+ * *  Parameters (list data type, name, and comment one per line):
+ * *   1. int num[] // takes the values from the array
+ * *   2. int length // the length of the array
+ * *  
+ * *  Function Description:
+ * *  Function sorts the values into their corresponding parts
+ * *
+ * ***************************************************************************/
+
+void sortingValues (int num[], int length)
+{
+  //LOCAL DECLARATIONS
+  int arrayRuns; //INITIALIZES THE NUMBER OF TIMES IT GOES THROUGH THE ARRAY AS AN INT
+  int i; //INITIALIZES THE LOOP COUNTER AS AN INT
+  int tempValue; //INITIALIZES THE TEMPORARY VALUE AS AN INT
+
+  //EXECUTABLE STATEMENTS
+  for (arrayRuns = 1; arrayRuns < length; arrayRuns++)
+  {
+    for (i = 0; i < length - arrayRuns; i++)
+    {
+      if (num[i] > num[i + 1]) //sorting for ascending order
+      {
+        tempValue = num[i];
+        num[i] = num[i + 1];
+        num[i + 1] = tempValue;
+      }
+      if (num[i + 1] % 2 == 0 && num[i] % 2 == 1) //sorting for odd/even
+      {
+        tempValue = num[i + 1];
+        num[i + 1] = num[i];
+        num[i] = tempValue;
+      }
+    }
+  }
+}
+
+/***************************************************************************
+ * *
+ * *  Function Information
+ * *
+ * *  Name of Function: sumThing
+ * *
+ * *  Function Return Type: void
+ * *
+ * *  Parameters (list data type, name, and comment one per line):
+ * *   1. int values[] // takes the values from the array
+ * *   2. int count // the length of the array
+ * *  
+ * *  Function Description:
+ * *  Function takes the mod of each number in the array by the array length and
+ * *  adds the value which corresponds to that location in the array given by
+ * *  the 
+ * *
+ * ***************************************************************************/
+
+int sumThing(int values[], int count)
+{
+  //LOCAL DECLARATIONS
+  int i; //INITIALIZES THE LOOP COUNTER AS AN INT
+  int sum = 0; //INITIALIZES THE SUM AS ZERO
+
+  //EXECUTABLE STATEMENTS
+  for (i = 0; i < count; i++)
+  {
+    if (values[i] != -1)
+    {
+      sum += values[values[i] % count];
+    }
+    else
+    {
+      i = 20;
+    }
+  }
+  return(sum); //returns the sum of the numbers that were asked for
+}
+
+/***************************************************************************
+ * *
+ * *  Function Information
+ * *
+ * *  Name of Function: printArray
+ * *
+ * *  Function Return Type: void
+ * *
+ * *  Parameters (list data type, name, and comment one per line):
+ * *   1. int numbers[] // takes the values from the array
+ * *  
+ * *  Function Description:
+ * *  Function prints the sorted array
+ * *
+ * ***************************************************************************/
+
+void printArray(int numbers[])
+{
+  //EXECUTABLE STATEMENTS
+  printf("\nSorted array: ");
+
+  //LOCAL DECLARATION
+  int i; //INITIALIZES THE LOOP COUNTER AS AN INT
+
+  //EXECUTABLE STATEMENTS
+  for (i = 0; i < NUMELEM; i++)
+  {
+    if (numbers[i] != -1)
+    {
+      printf("%d ", numbers[i]);
+    }
+  }
+  //print new line
+  printf("\n");
+}
+
+/***************************************************************************
+ * *
+ * *  Function Information
+ * *
+ * *  Name of Function: printVal
+ * *
+ * *  Function Return Type: void
+ * *
+ * *  Parameters (list data type, name, and comment one per line):
+ * *   1. int sum // the weird sum that we were supposed to take.
+ * *  
+ * *  Function Description:
+ * *  Function prints the sum and the words before the sum.
+ * *
+ * ***************************************************************************/
+
+void printVal(int sum)
+{
+  //EXECUTABLE STATEMENTS
+  printf("Calculated sum: %d\n", sum);
+}
